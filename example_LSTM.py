@@ -57,6 +57,16 @@ class LSTMTagger(nn.Module):
 
     def forward(self, sentence):
         embeds = self.word_embeddings(sentence)
+
+        # print(type(embeds))
+        print(embeds)
+        print(embeds.shape)
+
+
+        # print(type(embeds.view(len(sentence), 1, -1)))
+        print(embeds.view(len(sentence), 1, -1))
+        print(embeds.view(len(sentence), 1, -1).shape)
+
         lstm_out, _ = self.lstm(embeds.view(len(sentence), 1, -1))
         tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1))
         tag_scores = F.log_softmax(tag_space, dim=1)
@@ -84,12 +94,12 @@ for epoch in range(300):  # again, normally you would NOT do 300 epochs, it is t
 
         # Step 2. Get our inputs ready for the network, that is, turn them into
         # Tensors of word indices.
-        print('sentence: ',sentence)
+        # print('sentence: ',sentence)
         sentence_in = prepare_sequence(sentence, word_to_ix)
         targets = prepare_sequence(tags, tag_to_ix)
 
         # Step 3. Run our forward pass.
-        print('sentence_in: ', sentence_in)
+        # print('sentence_in: ', sentence_in)
         # print(*sentence_in,sep='\n')
         tag_scores = model(sentence_in)
 
